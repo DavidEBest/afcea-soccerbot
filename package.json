@@ -1,0 +1,29 @@
+{
+  "name": "afcea-soccerbot",
+  "version": "1.0.0",
+  "description": "Example driving code for the AFCEA Soccerbot",
+  "main": "soccer-bot.js",
+  "scripts": {
+    "start": "node soccer-bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidebest/afcea-soccerbot.git"
+  },
+  "dependencies": {
+    "johnny-five": "^0.15.0",
+    "keypress": "^0.2.1",
+    "node-gamepad": "^0.1.15"
+  },
+  "keywords": [
+    "sumobot",
+    "nodebotsday",
+    "afcea"
+  ],
+  "author": "David Best <dave.e.best@gmail.com>",
+  "license": "CC-BY-SA-3.0",
+  "bugs": {
+    "url": "https://github.com/davidebest/afcea-soccerbot/issues"
+  },
+  "homepage": "https://github.com/davidebest/afcea-soccerbot#readme"
+}
