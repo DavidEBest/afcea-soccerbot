@@ -1,32 +1,34 @@
 'use strict';
 
+// Import our board, and start it up!
 var five = require('johnny-five');
 var board = new five.Board();
 
-var GamePad = require( 'node-gamepad' );
-var controller = new GamePad( 'snes/retrolink' );
+// Import our controller, configure it, and connect it!
+var GamePad = require('node-gamepad');
+var controller = new GamePad('snes/retrolink');
 controller.connect();
 
-var FAST_SPEED = 230;
-var NORMAL_SPEED = 200;
-var SLOW_SPEED = 150;
+// Const values are constant, you can't change them while running.
+const FAST_SPEED = 230;
+const NORMAL_SPEED = 200;
+const SLOW_SPEED = 150;
 
+// When our board is ready, do this!
 board.on('ready', function() {
-  // Use your shield configuration from the list
-  // http://johnny-five.io/api/motor/#pre-packaged-shield-configs
   var configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V1;
+  // Try forward, reverse, start, or stop
+  // http://johnny-five.io/examples/motor/ and http://johnny-five.io/examples/motor-directional/
   var motors = new five.Motors([
     configs.M1,
     configs.M2
   ]);
+  // Try on, off, blink, strobe, or stop, more here: http://johnny-five.io/examples/led/
+  var led = five.Led(13);
 
-  this.repl.inject({
-    motors: motors
-  });
+  console.log('Welcome to the SoccerBot!');
 
-  console.log('Welcome to the Motorized SumoBot!');
-  console.log('Control the bot with the arrow keys, and SPACE to stop.');
-
+  // utility functions for making something happen for a period of time.
   const setAsyncTimeout = (cb, timeout = 0) => new Promise(resolve => {
     setTimeout(() => {
       cb();
@@ -34,6 +36,7 @@ board.on('ready', function() {
     }, timeout);
   });
 
+  // async means we won't wait for the results, unless we 'await' them.
   async function doFor(func, ms) {
     func();
     await setAsyncTimeout(() => {
@@ -41,100 +44,21 @@ board.on('ready', function() {
     }, ms);
   }
 
+  // Our dance function. How do we call it and what should it do?
   async function dance() {
     console.log('Dancing');
-    await doFor(forward, 2500);
-    await doFor(left, 2000);
-    await doFor(right, 2000);
-    await doFor(backward, 2500);
-    //motors.fwd(NORMAL_SPEED);
-    //setTimeout(() => {
-    //  motors.rev(NORMAL_SPEED);
-    //}, 200);
+    // these are a little weird syntax-wise
+    // await doFor(thingToDo, 2500);
   }
 
-  function forward() {
-    console.log('Going forward');
-    motors.fwd(NORMAL_SPEED);
-  }
-
-  function backward() {
-    console.log('Going backward');
-    motors.rev(NORMAL_SPEED);
-  }
-
-  function left() {
-    console.log('Going left');
-    motors[0].rev(NORMAL_SPEED);
-    motors[1].fwd(NORMAL_SPEED);
-  }
-
-  function right() {
-    console.log('Going right');
-    motors[1].rev(NORMAL_SPEED);
-    motors[0].fwd(NORMAL_SPEED);
-  }
-
-  function stop() {
-    motors.stop();
-  }
-
-  function sweep() {
-    console.log('Sweep the leg!!');
-  }
-
-  function turbo() {
-    console.log('Turbo button engaged!');
-    motors.fwd(FAST_SPEED);
-  }
-
-  controller.on( 'up:press', function() {
-    console.log( 'up' );
-    forward();
-  } );
-
-  controller.on( 'down:press', function() {
-    console.log( 'down' );
-    backward();
-  } );
-
-  controller.on( 'left:press', function() {
-    console.log( 'left' );
-    left();
-  } );
-
-  controller.on( 'right:press', function() {
-    console.log( 'right' );
-    right();
-  } );
-
-  controller.on( 'select:press', function() {
-    console.log( 'select' );
-    stop();
-  } );
-
+  // From node-gamepad, https://github.com/carldanley/node-gamepad
+  // Buttons
+  // {name}:press - No data is attached to this callback but it serves the purpose of notifying the developer that a button has been pressed.
+  // {name}:release - No data is attached to this callback but it serves the purpose of notifying the developer that a button (that was previously pressed) has been released.
+  // What other buttons should we try?
   controller.on( 'start:press', function() {
     console.log( 'start' );
-    stop();
-  } );
-
-  controller.on( 'b:press', function() {
-    console.log( 'b' );
     dance();
   } );
 
-  controller.on( 'a:press', function() {
-    console.log( 'a' );
-    turbo();
-  } );
-
-  controller.on( 'x:press', function() {
-    console.log( 'x' );
-    dance();
-  } );
-
-  controller.on( 'y:press', function() {
-    console.log( 'y' );
-    turbo();
-  } );
 });
