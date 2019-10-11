@@ -15,15 +15,13 @@ If you're using Windows, you'll also need to install the [Arduino IDE](https://w
 ```
   git clone https://github.com/DavidEBest/afcea-soccerbot.git
   cd afcea-soccerbot 
-  npm i
-  npm i -g firmata-party
+  npm install
 ```
 
 ### Controlling Your Bot
 
 * Plug your Arduino into your computer's USB port
-* Flash your Arduino with the Firmata sketch:
-  `firmata-party uno --debug`
+* Plug your gamepad into your computer's other USB port
 * Start the code that controls your bot!
   `npm start`
 
